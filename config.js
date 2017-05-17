@@ -1,5 +1,6 @@
 var DFM_CONF = DFM_CONF || {};
 DFM_CONF.constants = DFM_CONF.constants || {};
+DFM_CONF.highlights = DFM_CONF.highlights || {};
 
 DFM_CONF.constants.FONT_FACE = 'fontFace';
 DFM_CONF.constants.FONT_SIZE = 'fontSize';
@@ -9,27 +10,39 @@ DFM_CONF.fontFace = localStorage.getItem(DFM_CONF.constants.FONT_FACE);
 DFM_CONF.fontSize = localStorage.getItem(DFM_CONF.constants.FONT_SIZE);
 DFM_CONF.lineHeight = localStorage.getItem(DFM_CONF.constants.LINE_HEIGHT);
 
-DFM_CONF.html = `
-	body.platform-mac ::shadow .webkit-html-attribute-name {
-      font-weight: 500;
-      font-style: italic;
-	}
-`;
+DFM_CONF.highlightStyles = {
+  html: {
+    checked: `
+      body.platform-mac ::shadow .webkit-html-attribute-name {
+          font-weight: bolder;
+          font-style: italic;
+      }
+    `,
+    unchecked: `
+      body.platform-mac ::shadow .webkit-html-attribute-name {
+          font-weight: normal;
+          font-style: normal;
+      }
+    `
+  },
 
-DFM_CONF.js = `
-	body.platform-mac .CodeMirror .cm-js-def {
-      font-weight: 500;
-      background-color: lightgoldenrodyellow;
-	}
-`;
-
-DFM_CONF.css = `
-	body.platform-mac .style-panes-wrapper .styles-section .simple-selector.selector-matches,
-	body.platform-mac .style-panes-wrapper .monospace .styles-section .simple-selector.selector-matches {
-      font-weight: 500;
-      background-color: yellow;
-	}
-`;
+  css: {
+    checked: `
+      body.platform-mac .style-panes-wrapper .styles-section .simple-selector.selector-matches,
+      body.platform-mac .style-panes-wrapper .monospace .styles-section .simple-selector.selector-matches {
+          font-weight: bolder;
+          background-color: yellow;
+      }
+    `,
+    unchecked: `
+      body.platform-mac .style-panes-wrapper .styles-section .simple-selector.selector-matches,
+      body.platform-mac .style-panes-wrapper .monospace .styles-section .simple-selector.selector-matches {
+          font-weight: normal;
+          background-color: transparent;
+      }
+    `
+  }
+};
 
 /**
  * Get Font styles to modify devtools fonts based on inputs
@@ -37,9 +50,9 @@ DFM_CONF.css = `
  */
 DFM_CONF.getFontStyles = function (fontOptions) {
   const {
-    fontFace = localStorage.getItem(DFM_CONF.constants.FONT_FACE),
-    fontSize = localStorage.getItem(DFM_CONF.constants.FONT_SIZE),
-    lineHeight = localStorage.getItem(DFM_CONF) 
+    fontFace = localStorage.getItem(DFM_CONF.constants.FONT_FACE) || 'inherit',
+    fontSize = localStorage.getItem(DFM_CONF.constants.FONT_SIZE) || 'inherit',
+    lineHeight = localStorage.getItem(DFM_CONF) || 'inherit'
   } = fontOptions;
 
   return `

@@ -46,6 +46,18 @@
         lineHeight: elements.lineHeight.value
       });
     });;
+
+    document.querySelectorAll('.other-option').forEach(node => {
+      node.addEventListener('change', event => {
+        const target = event.currentTarget;
+        const options = {};
+
+        const changedOption = 'highlight.' + target.dataset.option;
+        options[changedOption] = target.checked;
+
+        store(options);
+      });
+    });
   }
 
 
