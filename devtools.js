@@ -1,63 +1,38 @@
-var consoleStyles = ``;
+// Block scoping to avoid an IIFE
+{
+  const fontFace = localStorage.getItem(DFM_CONF.FONT_FACE);
+  const fontSize = localStorage.getItem(DFM_CONF.FONT_SIZE);
+  const lineHeight = localStorage.getItem(DFM_CONF.LINE_HEIGHT);
 
-var htmlAttrHighlight = `
-	body.platform-mac ::shadow .webkit-html-attribute-name {
-		font-weight: 500;
-	    font-style: italic;
-	}
-`;
+  /**
+   * Change font attributes in devtools as per options
+   *
+   * @param {object} options Font attributes
+   */
+  const changeStyles = function(options) {
+    DFM_CONF.getFontStyles({
+      fontFace: options.fontFace,
+      fontSize: options.fontSize,
+      lineHeight: options.lineHeight
+    });
 
-var jsDefHighlight = `
-	body.platform-mac .CodeMirror .cm-js-def {
-		font-weight: 500;
-		background-color: lightgoldenrodyellow;
-	}
-`;
+    chrome.devtools.panels.applyStyleSheet(styles);
+  }
 
-var styleTabHighlight = `
-	body.platform-mac .style-panes-wrapper .styles-section .simple-selector.selector-matches,
-	body.platform-mac .style-panes-wrapper .monospace .styles-section .simple-selector.selector-matches {
-		font-weight: 500;
-	    background-color: yellow;
-	}
-`;
+  changeStyles({fontFace, fontSize, lineHeight});
 
-function changeStyles(fontFace = 'Hack') {
-	var styles = `
-		body.platform-windows .style-panes-wrapper,
-		body.platform-windows .style-panes-wrapper .monospace,
-		body.platform-windows .CodeMirror,
-		body.platform-windows .CodeMirror .monospace,
-		body.platform-mac .style-panes-wrapper,
-		body.platform-mac .style-panes-wrapper .monospace,
-		body.platform-mac .CodeMirror,
-		body.platform-mac .CodeMirror .monospace {
-			font-size: 13px !important;
-		    font-family: ${fontFace}, monospace !important;
-		}
-
-		body.platform-windows ::shadow .monospace,
-		body.platform-windows ::shadow .source-code,
-		body.platform-mac ::shadow .monospace,
-		body.platform-mac ::shadow .source-code {
-		    font-size: 13px !important;
-		    line-height: 20px !important;
-		    font-family: ${fontFace}, monospace !important;
-		}
-	`;
-
-	chrome.devtools.panels.applyStyleSheet(styles);
+  window.addEventListener('storage', e => {
+    switch(e.key) {
+      case DFM_CONF.FONT_FACE:
+        changeStyles({ fontFace: e.newValue });
+        break;
+      case DFM_CONF.FONT_SIZE:
+        changeStyles({ fontSize: e.newValue });
+        break;
+      case DFM_CONF.LINE_HEIGHT:
+        changeStyles({ lineHeight: e.newValue });
+        break;
+      default: break;
+    }
+  });
 }
-
-var currentFont = localStorage.getItem('current_font');
-changeStyles(currentFont);
-
-window.addEventListener('storage', e => {
-	switch(e.key) {
-		case 'current_font':
-			changeStyles(e.newValue);
-			break;
-		default:
-			break;
-	}
-});
