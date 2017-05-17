@@ -2,20 +2,71 @@
 <html>
 <head>
 	<title>DevTools FontFace Changer</title>
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+  <!-- CSS Reset -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+  <!-- Milligram CSS minified -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css">
 	<script type="text/javascript" src="options.js"></script>
 	<style type="text/css" media="screen">
 		body {
 			font-size:  1rem;
+      padding: 1rem;
 		}
-		select {
-			font-size:  1rem;	
+    .wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 70rem;
+      margin: 0 auto;
+    }
+		select, input:not([type='checkbox']), label {
+			font-size:  1.5rem;
+      width: 100%;
+      max-width: 30rem;
 		}
 	</style>
 </head>
 <body>
-	<label>
-		Choose font:
-		<select name="font-face" id="fontFace"></select>
-	</label>
+  <section class="wrapper">
+    <h1>DevTools FontFace Changer</h1>
+    <h2>Font properties:</h2>
+    <label>
+      Font Family:
+      <select name="font-face" id="fontFace"></select>
+    </label>
+    <label>
+      Font Size:
+      <input type="text" name="font-size" />
+    </label>
+    <label>
+      Line Height:
+      <input type="text" name="line-height" />
+    </label>
+    <label>
+      Line Height:
+      <input type="text" name="line-height" />
+    </label>
+    <br><br>
+    <h2>Other options:</h2>
+    <label>
+      <input type="checkbox" name="section-all" />
+      All
+    </label>
+    <label>
+      <input type="checkbox" name="feature-attrhighlight" />
+      Highlight HTML attributes
+    </label>
+    <label>
+      <input type="checkbox" name="feature-jsdefhighlight" />
+      Highlight JS definitions (in source)
+    </label>
+    <label>
+      <input type="checkbox" name="feature-csstabhighlight" />
+      Highlight CSS rules for selected HTML
+    </label>
+    <br><br>
+    <input type="submit" value="Save Changes!">
+  </section>
 </body>
 </html>

@@ -24,6 +24,10 @@ var styleTabHighlight = `
 
 function changeStyles(fontFace = 'Hack') {
 	var styles = `
+		body.platform-windows .style-panes-wrapper,
+		body.platform-windows .style-panes-wrapper .monospace,
+		body.platform-windows .CodeMirror,
+		body.platform-windows .CodeMirror .monospace,
 		body.platform-mac .style-panes-wrapper,
 		body.platform-mac .style-panes-wrapper .monospace,
 		body.platform-mac .CodeMirror,
@@ -32,9 +36,12 @@ function changeStyles(fontFace = 'Hack') {
 		    font-family: ${fontFace}, monospace !important;
 		}
 
+		body.platform-windows ::shadow .monospace,
+		body.platform-windows ::shadow .source-code,
 		body.platform-mac ::shadow .monospace,
 		body.platform-mac ::shadow .source-code {
 		    font-size: 13px !important;
+		    line-height: 20px !important;
 		    font-family: ${fontFace}, monospace !important;
 		}
 	`;
@@ -46,5 +53,11 @@ var currentFont = localStorage.getItem('current_font');
 changeStyles(currentFont);
 
 window.addEventListener('storage', e => {
-	changeStyles(e.newValue);
+	switch(e.key) {
+		case 'current_font':
+			changeStyles(e.newValue);
+			break;
+		default:
+			break;
+	}
 });
