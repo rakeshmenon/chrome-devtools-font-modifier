@@ -1,8 +1,13 @@
 var DFM_CONF = DFM_CONF || {};
+DFM_CONF.constants = DFM_CONF.constants || {};
 
-DFM_CONF.FONT_FACE = 'fontFace';
-DFM_CONF.FONT_SIZE = 'fontSize';
-DFM_CONF.LINE_HEIGHT = 'lineHeight';
+DFM_CONF.constants.FONT_FACE = 'fontFace';
+DFM_CONF.constants.FONT_SIZE = 'fontSize';
+DFM_CONF.constants.LINE_HEIGHT = 'lineHeight';
+
+DFM_CONF.fontFace = localStorage.getItem(DFM_CONF.constants.FONT_FACE);
+DFM_CONF.fontSize = localStorage.getItem(DFM_CONF.constants.FONT_SIZE);
+DFM_CONF.lineHeight = localStorage.getItem(DFM_CONF.constants.LINE_HEIGHT);
 
 DFM_CONF.html = `
 	body.platform-mac ::shadow .webkit-html-attribute-name {
@@ -32,18 +37,22 @@ DFM_CONF.css = `
  */
 DFM_CONF.getFontStyles = function (fontOptions) {
   const {
-    fontFace = localStorage.getItem('fontFace'),
-    fontSize = localStorage.getItem('fontSize'),
-    lineHeight = localStorage.getItem('lineHeight') 
+    fontFace = localStorage.getItem(DFM_CONF.constants.FONT_FACE),
+    fontSize = localStorage.getItem(DFM_CONF.constants.FONT_SIZE),
+    lineHeight = localStorage.getItem(DFM_CONF) 
   } = fontOptions;
 
   return `
     body.platform-windows .style-panes-wrapper,
     body.platform-windows .style-panes-wrapper .monospace,
+    body.platform-mac .style-panes-wrapper,
+    body.platform-mac .style-panes-wrapper .monospace {
+        font-size: ${fontSize} !important;
+        font-family: ${fontFace}, monospace !important;
+    }
+
     body.platform-windows .CodeMirror,
     body.platform-windows .CodeMirror .monospace,
-    body.platform-mac .style-panes-wrapper,
-    body.platform-mac .style-panes-wrapper .monospace,
     body.platform-mac .CodeMirror,
     body.platform-mac .CodeMirror .monospace,
     body.platform-windows ::shadow .monospace,

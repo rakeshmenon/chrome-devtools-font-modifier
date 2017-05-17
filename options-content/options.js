@@ -3,16 +3,16 @@
   /**
    * Load fonts available in system and pre populate the select box
    */
-  const prePopulateFonts = function() {
-    const currentFont = localStorage.getItem(DFM_CONF.FONT_FACE);
-
+  const prePopulateFontStyles = function() {
     chrome.fontSettings.getFontList(fonts => {
       const optionsHTML = fonts.map(font => {
-        const selected = font.fontId === currentFont ? 'selected' : '';
+        const selected = font.fontId === DFM_CONF.fontFace ? 'selected' : '';
         return '<option value="' + font.fontId + '" ' + selected + '>' + font.displayName + '</option>';
       }).join('');
       
-      document.getElementById('fontFace').innerHTML = optionsHTML;
+      document.getElementById(DFM_CONF.constants.FONT_FACE).innerHTML = optionsHTML;
+      document.getElementById(DFM_CONF.constants.FONT_SIZE).value = DFM_CONF.fontSize;
+      document.getElementById(DFM_CONF.constants.LINE_HEIGHT).value = DFM_CONF.lineHeight;
     });
   }
 
@@ -32,20 +32,20 @@
    */
   const bindEvents = function() {
     const elements = {
-      fontFace: document.getElementById(DFM_CONF.FONT_FACE),
-      fontSize: document.getElementById(DFM_CONF.FONT_SIZE),
-      lineHeight: document.getElementById(DFM_CONF.LINE_HEIGHT)
+      fontFace: document.getElementById(DFM_CONF.constants.FONT_FACE),
+      fontSize: document.getElementById(DFM_CONF.constants.FONT_SIZE),
+      lineHeight: document.getElementById(DFM_CONF.constants.LINE_HEIGHT)
     };
 
-    document.querySelectorAll('.save-changes').forEach((node) => {
-      node.addEventListener('click', () => {
-        store({
-          fontFace: elements.fontFace.value,
-          fontSize: elements.fontSize.value,
-          lineHeight: elements.lineHeight.value
-        });
+    document.querySelector('#optionsForm').addEventListener('submit', event => {
+      event.preventDefault();
+
+      store({
+        fontFace: elements.fontFace.value,
+        fontSize: elements.fontSize.value,
+        lineHeight: elements.lineHeight.value
       });
-    });
+    });;
   }
 
 
@@ -53,7 +53,7 @@
    * Start processing
    */
   const init = function() {
-    prePopulateFonts();
+    prePopulateFontStyles();
     bindEvents();
   }
 
